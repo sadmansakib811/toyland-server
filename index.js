@@ -25,6 +25,13 @@ async function run() {
     await client.connect();
     // create new db for this project and new collection for data:
     const toyCollection = client.db("toyDB").collection("toys");
+
+    // =======================get all toys data=======================
+    app.get('/toys', async(req, res)=>{
+      const cursor = toyCollection.find();
+      const result = await cursor.toArray();
+      res.send(result)
+    })
 // ========================POST======================================
     // added toy to db post method
     app.post('/toys',async(req,res)=>{
