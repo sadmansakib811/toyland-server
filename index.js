@@ -9,7 +9,7 @@ app.use(express.json());
 // ===============================================
                     //  MONGO DB
 // ===============================================
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.kxlelta.mongodb.net/?retryWrites=true&w=majority`;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -32,6 +32,25 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result)
     })
+     // ======================get product by category======================
+     app.get('/toys/:category', async (req, res) => {
+      const category = req.params.category;
+      const query = { category:  category}; // Update the line here
+      const result = await toyCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    // =======================single toy details=======================
+    app.get('/toys/:id',async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = {_id: new ObjectId (id)};
+      const result = await toyCollection.findOne(query);
+    res.send(result);
+
+    })
+
+   
 // ========================POST======================================
     // added toy to db post method
     app.post('/toys',async(req,res)=>{
