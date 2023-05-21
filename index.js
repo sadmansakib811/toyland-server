@@ -56,6 +56,23 @@ async function run() {
     res.send(result);
   });
 
+  // ========================POST======================================
+    // added toy to db post method
+    app.post('/toys',async(req,res)=>{
+      const newToy =req.body;
+      console.log(newToy);
+      const result = await toyCollection.insertOne(newToy);
+      res.send(result);
+     })
+
+     // =======================single toy details=======================
+
+ app.get('/toy', async(req, res)=>{
+  const cursor = toyCollection.find();
+  const result = await cursor.toArray();
+  res.send(result)
+})
+
 
 // ===================== Delete Toy======================
  //  delete method:
