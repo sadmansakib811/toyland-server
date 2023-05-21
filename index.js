@@ -79,7 +79,30 @@ app.get ('/toy/:id',async (req, res) => {
   const result = await toyCollection.findOne(query);
 res.send(result);
 })
+// ==========================Edit MY tOY=======================
+app.put('/toy/:id', async(req, res) => {
+  const id = req.params.id;
+  const filter = {_id: new ObjectId(id)}
+  const options = { upsert: true };
+  const editedToy = req.body;
 
+  const toy = {
+      $set: {
+          name: editedToy.name, 
+          sellername: editedToy.sellername, 
+          selleremail: editedToy.selleremail, 
+          price: editedToy.price, 
+          category: editedToy.category, 
+          details: editedToy.details, 
+          photo: editedToy.photo,
+          rating: editedToy.rating,
+          quantity: editedToy.quantity
+      }
+  }
+
+  const result = await toyCollection.updateOne(filter, toy, options);
+  res.send(result);
+})
 // ===================== Delete Toy======================
  //  delete method:
   app.delete('/dlttoys/:id', async(req, res) => {
