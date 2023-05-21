@@ -40,27 +40,31 @@ async function run() {
       res.send(result);
     });
 
-    // =======================single toy details=======================
-    app.get('/toys/:id',async (req, res) => {
-      const id = req.params.id;
-      console.log(id);
-      const query = {_id: new ObjectId (id)};
-      const result = await toyCollection.findOne(query);
-    res.send(result);
-
-    })
-
    
-// ========================POST======================================
-    // added toy to db post method
-    app.post('/toys',async(req,res)=>{
-        const newToy =req.body;
-        console.log(newToy);
-        const result = await toyCollection.insertOne(newToy);
-        res.send(result);
-       })
-    
 
+   // ============================== Get My Toy using email ===============================
+   app.get('/mytoys', async (req, res) => {
+    console.log(req.query.selleremail);
+    let query = {};
+  
+    // Only filter data if the selleremail parameter is provided
+    if (req.query.selleremail) {
+      query = { selleremail: req.query.selleremail };
+    }
+  
+    const result = await toyCollection.find(query).toArray();
+    res.send(result);
+  });
+
+
+// ===================== Delete Toy======================
+ //  delete method:
+  app.delete('/dlttoys/:id', async(req, res) => {
+    const id = req.params.id;
+    const query = {_id: new ObjectId (id)};
+    const result = await toyCollection.deleteOne(query);
+    res.send(result);
+  })
 
 
     // Send a ping to confirm a successful connection
